@@ -135,7 +135,7 @@ contract Pool {
 
     function depositToPOS() public payable {
         require(block.timestamp < settlementDate);
-        require(msg.value > 0.001 ether, "mc");
+        require(msg.value > 0.001 ether, "Too little ETH deposited");
         
         uint256 temp = (block.timestamp - startDate)*1000;
         // 86400000
@@ -156,7 +156,7 @@ contract Pool {
 
     function depositToNEG() public payable {
         require(block.timestamp < settlementDate);
-        require(msg.value > 0.001 ether, "mc");
+        require(msg.value > 0.001 ether, "Too little ETH deposited");
         
         negativeSide.mint(msg.value);
         negativeSide.safeTransfer(msg.sender,msg.value);
@@ -179,8 +179,7 @@ contract Pool {
     }
 
     function settle() public {
-        require(block.timestamp > settlementDate, "te");
-        require(withdraw == false);
+        require(block.timestamp > settlementDate, "Current time is before settlement date");
 
         (,int256 resultPrice,,,) = oracle.latestRoundData();
 
@@ -192,9 +191,9 @@ contract Pool {
     }
 
     function turnWithdrawOn() public {
-        require(block.timestamp < minRatioDate, "pd");
-        require(PosAmtDeposited[msg.sender] > 0 ||  NegAmtDeposited[msg.sender] > 0, "yn");
-        require(minRatio < (numDepPos/numDepNeg), "CNS");
+        require(block.timestamp < minRatioDate, "The Withdrawal Date has passed");
+        require(PosAmtDeposited[msg.sender] > 0 ||  NegAmtDeposited[msg.sender] > 0, "You have not deposited any funds");
+        require(minRatio < (numDepPos/numDepNeg), "The minimum ratio has not been met");
         if(minRatio < (numDepPos/numDepNeg)){
             withdraw = true;
             emit WithdrawChanged(withdraw);
@@ -202,10 +201,9 @@ contract Pool {
     }
 
     function redeemWithPOS() public { 
-        require(withdraw == false,"rnf");
-        require(block.timestamp > settlementDate, "te");
-        require(condition == true,"cn");
-        require(positiveSide.balanceOf(msg.sender) > 0, "yn");
+        require(block.timestamp > settlementDate, "Current time is before settlement date");
+        require(condition == true,"The POS side did not win");
+        require(positiveSide.balanceOf(msg.sender) > 0, "You have no tokens");
 
         uint256 saved = ((positiveSide.balanceOf(msg.sender)*(address(this).balance))/positiveSide.totalSupply());
         
@@ -215,10 +213,9 @@ contract Pool {
     }
 
     function redeemWithNEG() public {
-        require(withdraw == false,"rnf");
-        require(block.timestamp > settlementDate, "te");
-        require(condition == false,"cn");
-        require(negativeSide.balanceOf(msg.sender) > 0, "yn");
+        require(block.timestamp > settlementDate, "Current time is before settlement date");
+        require(condition == false,"The NEG side did not win");
+        require(negativeSide.balanceOf(msg.sender) > 0, "You have no tokens");
 
         uint256 saved = ((negativeSide.balanceOf(msg.sender)*(address(this).balance))/negativeSide.totalSupply());
         
@@ -228,8 +225,9 @@ contract Pool {
     }
 
     function withdrawWithPOS() public {
-        require(withdraw == true,"wf");
-        require(positiveSide.balanceOf(msg.sender) > 0, "yn");
+        require(withdraw == true,"Withdrawals have not been turned on");
+        require(block.timestamp < minRatioDate, "The Withdrawal Date has passed");
+        require(positiveSide.balanceOf(msg.sender) > 0, "You have no tokens");
 
         positiveSide.safeTransferFrom(msg.sender,address(this),positiveSide.balanceOf(msg.sender));
         (payable(msg.sender)).transfer(PosAmtDeposited[msg.sender]);
@@ -239,8 +237,9 @@ contract Pool {
     }
 
     function withdrawWithNEG() public {
-        require(withdraw == true,"wf");
-        require(negativeSide.balanceOf(msg.sender) > 0, "yn");
+        require(withdraw == true,"Withdrawals have not been turned on");
+        require(block.timestamp < minRatioDate, "The Withdrawal Date has passed");
+        require(negativeSide.balanceOf(msg.sender) > 0, "You have no tokens");
 
         negativeSide.safeTransferFrom(msg.sender,address(this),negativeSide.balanceOf(msg.sender));
         (payable(msg.sender)).transfer(NegAmtDeposited[msg.sender]);
@@ -250,7 +249,7 @@ contract Pool {
     }
 
     function turnToDust() public {
-        require(block.timestamp > turnToDustDate, "te");
+        require(block.timestamp > turnToDustDate, "Current time is before Destruction date");
 
         positiveSide.turnToDust();
         negativeSide.turnToDust();
