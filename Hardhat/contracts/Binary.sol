@@ -80,10 +80,11 @@ contract Pool {
     }
 
     function getDiscountedValue() public view returns (uint256){
-        uint256 temp = block.timestamp - startDate;
-        uint256 dividedDecay = (decayFactor/100);
-        uint256 end = ((temp*dividedDecay)/86400);
-        uint256 tots = 1-end;
+        uint256 temp = (block.timestamp - startDate)*1000;
+        // 86400000
+        uint256 end = ((temp*decayFactor)/86400);
+        // 1000
+        uint256 tots = 10000-end;
         return(tots);
     }
 
@@ -136,10 +137,12 @@ contract Pool {
         require(block.timestamp < settlementDate);
         require(msg.value > 0.001 ether, "mc");
         
-        uint256 temp = block.timestamp - startDate;
-        uint256 dividedDecay = (decayFactor/100);
-        uint256 end = ((temp*dividedDecay)/86400);
-        uint256 tots = 1-end;
+        uint256 temp = (block.timestamp - startDate)*1000;
+        // 86400000
+        uint256 end = ((temp*decayFactor)/86400);
+        // 1000
+        uint256 tots = 10000-end;
+        // 9000
         uint256 amt = tots*(msg.value);
         
         positiveSide.mint(amt);
@@ -158,10 +161,12 @@ contract Pool {
         negativeSide.mint(msg.value);
         negativeSide.safeTransfer(msg.sender,msg.value);
 
-        uint256 temp = block.timestamp - startDate;
-        uint256 dividedDecay = (decayFactor/100);
-        uint256 end = ((temp*dividedDecay)/86400);
-        uint256 tots = 1-end;
+        uint256 temp = (block.timestamp - startDate)*1000;
+        // 86400000
+        uint256 end = ((temp*decayFactor)/86400);
+        // 1000
+        uint256 tots = 10000-end;
+        // 9000
         uint256 amt = tots*(msg.value);
         
         negativeSide.mint(amt);
