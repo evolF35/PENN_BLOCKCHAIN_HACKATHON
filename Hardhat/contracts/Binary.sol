@@ -27,11 +27,9 @@ contract Pool {
     address oracleAddress;
 
     uint256 decayFactor;
-
     // address decayAddress;
     // address capitalfactorAddress;
     // uint256 capitalFactor;
-
     uint256 maxRatio;
     uint256 maxRatioDate;
 
@@ -69,7 +67,6 @@ contract Pool {
         string memory acronym,
         uint256 _turnToDustDate
         ) 
-        
         {
         startDate = block.timestamp;
         settlementDate = _settlementDate;
@@ -107,9 +104,9 @@ contract Pool {
         require(block.timestamp < settlementDate);
         require(msg.value > 0.001 ether, "Too little ETH deposited");
         
-       uint256 temp = (block.timestamp - startDate);
+        uint256 temp = (block.timestamp - startDate);
         uint256 discount = temp * decayFactor;
-        uint256 amt = (msg.value)*(1e8 - discount);
+        uint256 amt = (msg.value)*(1e18 - discount);
         
         positiveSide.mint(amt);
         positiveSide.safeTransfer(msg.sender,amt);
@@ -129,7 +126,7 @@ contract Pool {
 
         uint256 temp = (block.timestamp - startDate);
         uint256 discount = temp * decayFactor;
-        uint256 amt = (msg.value)*(1e8 - discount);
+        uint256 amt = (msg.value)*(1e18 - discount);
         
         negativeSide.mint(amt);
         negativeSide.safeTransfer(msg.sender,amt);
