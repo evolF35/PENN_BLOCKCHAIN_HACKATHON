@@ -107,9 +107,9 @@ contract Pool {
         require(block.timestamp < settlementDate);
         require(msg.value > 0.001 ether, "Too little ETH deposited");
         
-        uint256 temp = block.timestamp - startDate;
+       uint256 temp = (block.timestamp - startDate);
         uint256 discount = temp * decayFactor;
-        uint256 amt = ((msg.value)/discount);
+        uint256 amt = (msg.value)*(1e8 - discount);
         
         positiveSide.mint(amt);
         positiveSide.safeTransfer(msg.sender,amt);
@@ -127,9 +127,9 @@ contract Pool {
         negativeSide.mint(msg.value);
         negativeSide.safeTransfer(msg.sender,msg.value);
 
-        uint256 temp = block.timestamp - startDate;
+        uint256 temp = (block.timestamp - startDate);
         uint256 discount = temp * decayFactor;
-        uint256 amt = ((msg.value)/discount);
+        uint256 amt = (msg.value)*(1e8 - discount);
         
         negativeSide.mint(amt);
         negativeSide.safeTransfer(msg.sender,amt);
