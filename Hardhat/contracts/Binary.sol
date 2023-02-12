@@ -229,7 +229,11 @@ contract Pool {
         require(block.timestamp < maxRatioDate, "The Withdrawal Date has passed");
         require(positiveSide.balanceOf(msg.sender) > 0, "You have no tokens");
 
+        //If they withdraw and it increases (numDepPos/numDepNeg) above maxRatio, then they can't withdraw again
 
+        if((numDepPos - PosAmtDeposited[msg.sender])/(numDepNeg) > maxRatio){
+            require(true == false, "You can't withdraw because it would increase the ratio above the max ratio");
+        }
 
         positiveSide.safeTransferFrom(msg.sender,address(this),positiveSide.balanceOf(msg.sender));
         (payable(msg.sender)).transfer(PosAmtDeposited[msg.sender]);
@@ -242,6 +246,10 @@ contract Pool {
         require(withdraw == true,"Withdrawals have not been turned on");
         require(block.timestamp < maxRatioDate, "The Withdrawal Date has passed");
         require(negativeSide.balanceOf(msg.sender) > 0, "You have no tokens");
+
+        if((numDepPos)/(numDepNeg - NegAmtDeposited[msg.sender]) > maxRatio){
+            require(true == false, "You can't withdraw because it would increase the ratio above the max ratio");
+        }
 
         negativeSide.safeTransferFrom(msg.sender,address(this),negativeSide.balanceOf(msg.sender));
         (payable(msg.sender)).transfer(NegAmtDeposited[msg.sender]);
