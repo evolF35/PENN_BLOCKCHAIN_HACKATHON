@@ -69,7 +69,7 @@ contract Pool {
     function pastSettlementDate() public view returns (bool){
         return(block.timestamp > settlementDate);
     }
-    
+
     AggregatorV3Interface public oracle;
 
     constructor(
@@ -263,8 +263,6 @@ contract deploy {
         address poolAddress, 
         uint256 turnToDustDate);
 
-    mapping(address => address) public pools;
-
     function createPool(
         address oracle, 
         int256 price, 
@@ -279,8 +277,9 @@ contract deploy {
             public returns (address newPool)
             {
                 newPool = address(new Pool(oracle,price,settlementDate,decay,maxRatio,maxRatioDate,name,acronym,turnToDustDate));
-                emit PoolCreated(oracle,price,settlementDate,decay,maxRatio,maxRatioDate,name,acronym,newPool, turnToDustDate);
+                emit PoolCreated(oracle,price,settlementDate,decay,maxRatio,maxRatioDate,name,acronym,newPool, turnToDustDate);                
                 return(newPool);
             }
 }
+
 

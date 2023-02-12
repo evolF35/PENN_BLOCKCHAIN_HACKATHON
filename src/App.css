@@ -1,38 +1,45 @@
-.App {
+
+*{
   text-align: center;
+  font-size: large;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+form label{
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  font-weight: bold;
+}
+
+form input{
+  width: 500px;
+  height: 30px;
+}
+
+input{
+  font-size: large;
+}
+
+table {
+  max-width: fit-content;
+}
+
+.addressClick {
+  cursor: pointer;
+}
+.depositTable {
+  width: 70px;
+}
+
+button {
+  background-color: #0a1084; /* Green */
+  border: none;
   color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  padding: 10px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 4%;
+  cursor: pointer;
 }
