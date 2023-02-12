@@ -1,7 +1,6 @@
 import React, {useState} from 'react'
 import deployABI from '../ABIs/Deploy.json'
-import {ethers} from 'ethers'
-
+const ethers = require("ethers")
 
 const DeployJS = () => {
 

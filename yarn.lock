@@ -4541,7 +4541,7 @@ etag@~1.8.1:
 
 ethers@^6.0.2:
   version "6.0.2"
-  resolved "https://registry.npmjs.org/ethers/-/ethers-6.0.2.tgz"
+  resolved "https://registry.yarnpkg.com/ethers/-/ethers-6.0.2.tgz#e147424b3464ecca7af23e0e2f0b3b045641ccfd"
   integrity sha512-YOHvShFjKordVEN7kVcKRp6xhpjq4ggZPcsAVuadXravZ7Z4qOflOEGfIaMnKp2ZQJqyR07iYVD6YVty4dI3Fw==
   dependencies:
     "@adraffy/ens-normalize" "1.8.9"
