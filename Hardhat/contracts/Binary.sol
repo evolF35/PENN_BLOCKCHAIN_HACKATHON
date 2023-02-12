@@ -69,6 +69,7 @@ contract Pool {
         string memory acronym,
         uint256 _turnToDustDate
         ) 
+        
         {
         startDate = block.timestamp;
         settlementDate = _settlementDate;
@@ -106,10 +107,9 @@ contract Pool {
         require(block.timestamp < settlementDate);
         require(msg.value > 0.001 ether, "Too little ETH deposited");
         
-        uint256 temp = (block.timestamp - startDate)*1000;
-        uint256 end = ((temp*decayFactor)/86400);
-        uint256 tots = 10000-end;
-        uint256 amt = tots*(msg.value);
+        uint256 temp = block.timestamp - startDate;
+        uint256 discount = temp * decayFactor / 1000;
+        uint256 amt = msg.value * (1 - discount / 1000);
         
         positiveSide.mint(amt);
         positiveSide.safeTransfer(msg.sender,amt);
@@ -127,10 +127,9 @@ contract Pool {
         negativeSide.mint(msg.value);
         negativeSide.safeTransfer(msg.sender,msg.value);
 
-        uint256 temp = (block.timestamp - startDate)*1000;
-        uint256 end = ((temp*decayFactor)/86400);
-        uint256 tots = 10000-end;
-        uint256 amt = tots*(msg.value);
+        uint256 temp = block.timestamp - startDate;
+        uint256 discount = temp * decayFactor / 1000;
+        uint256 amt = msg.value * (1 - discount / 1000);
         
         negativeSide.mint(amt);
         negativeSide.safeTransfer(msg.sender,amt);
@@ -267,9 +266,4 @@ contract deploy {
                 return(newPool);
             }
 }
-
-
-
-
-
 
