@@ -37,8 +37,8 @@ contract Pool {
     // address capitalfactorAddress;
     // uint256 capitalFactor;
 
-    uint256 minRatio;
-    uint256 minRatioDate;
+    uint256 maxRatio;
+    uint256 maxRatioDate;
 
     bool condition;
     bool withdraw;
@@ -93,8 +93,8 @@ contract Pool {
         int256 _price, 
         uint256 _settlementDate,
         uint256 _decay, 
-        uint256 _minRatio, 
-        uint256 _minRatioDate,
+        uint256 _maxRatio, 
+        uint256 _maxRatioDate,
         string memory name,
         string memory acronym,
         uint256 _turnToDustDate
@@ -107,8 +107,8 @@ contract Pool {
         price = _price;
         oracleAddress = _oracle;
         decayFactor = _decay;
-        minRatio = _minRatio;
-        minRatioDate = _minRatioDate;
+        maxRatio = _maxRatio;
+        maxRatioDate = _maxRatioDate;
         turnToDustDate = _turnToDustDate;
 
         string memory over = "Over";
@@ -215,10 +215,10 @@ contract Pool {
     }
 
     function turnWithdrawOn() public {
-        require(block.timestamp < minRatioDate, "The Withdrawal Date has passed");
+        require(block.timestamp < maxRatioDate, "The Withdrawal Date has passed");
         require(PosAmtDeposited[msg.sender] > 0 ||  NegAmtDeposited[msg.sender] > 0, "You have not deposited any funds");
-        require(minRatio < (numDepPos/numDepNeg), "The minimum ratio has not been met");
-        if(minRatio < (numDepPos/numDepNeg)){
+        require(maxRatio < (numDepPos/numDepNeg), "The minimum ratio has not been met");
+        if(maxRatio < (numDepPos/numDepNeg)){
             withdraw = true;
             emit WithdrawChanged(withdraw);
         }
@@ -226,8 +226,10 @@ contract Pool {
 
     function withdrawWithPOS() public {
         require(withdraw == true,"Withdrawals have not been turned on");
-        require(block.timestamp < minRatioDate, "The Withdrawal Date has passed");
+        require(block.timestamp < maxRatioDate, "The Withdrawal Date has passed");
         require(positiveSide.balanceOf(msg.sender) > 0, "You have no tokens");
+
+
 
         positiveSide.safeTransferFrom(msg.sender,address(this),positiveSide.balanceOf(msg.sender));
         (payable(msg.sender)).transfer(PosAmtDeposited[msg.sender]);
@@ -238,7 +240,7 @@ contract Pool {
 
     function withdrawWithNEG() public {
         require(withdraw == true,"Withdrawals have not been turned on");
-        require(block.timestamp < minRatioDate, "The Withdrawal Date has passed");
+        require(block.timestamp < maxRatioDate, "The Withdrawal Date has passed");
         require(negativeSide.balanceOf(msg.sender) > 0, "You have no tokens");
 
         negativeSide.safeTransferFrom(msg.sender,address(this),negativeSide.balanceOf(msg.sender));
@@ -265,8 +267,8 @@ contract deploy {
         int256 _price, 
         uint256 _settlementDate,
         uint256 decay,
-        uint256 minRatio,
-        uint256 minRatioDate,
+        uint256 maxRatio,
+        uint256 maxRatioDate,
         string name,
         string acronym,
         address poolAddress, 
@@ -277,18 +279,19 @@ contract deploy {
         int256 price, 
         uint256 settlementDate,
         uint256 decay,
-        uint256 minRatio,
-        uint256 minRatioDate,
+        uint256 maxRatio,
+        uint256 maxRatioDate,
         string memory name,
         string memory acronym, 
         uint256 turnToDustDate) 
     
             public returns (address newPool)
             {
-                newPool = address(new Pool(oracle,price,settlementDate,decay,minRatio,minRatioDate,name,acronym,turnToDustDate));
-                emit PoolCreated(oracle,price,settlementDate,decay,minRatio,minRatioDate,name,acronym,newPool, turnToDustDate);
+                newPool = address(new Pool(oracle,price,settlementDate,decay,maxRatio,maxRatioDate,name,acronym,turnToDustDate));
+                emit PoolCreated(oracle,price,settlementDate,decay,maxRatio,maxRatioDate,name,acronym,newPool, turnToDustDate);
                 return(newPool);
             }
+
 }
 
 
