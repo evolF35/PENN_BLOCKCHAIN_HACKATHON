@@ -4,7 +4,7 @@ import './App.css';
 
 import DeployPageJS from './Pages/DeployPage';
 import PoolPageJS from './Pages/PoolPage';
-const ethers = require("ethers")
+import { ethers } from "ethers";
 
 function App() {
   const [activeComponent, setActiveComponent] = useState('DeployPageJS');

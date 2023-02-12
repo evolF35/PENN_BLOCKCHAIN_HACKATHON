@@ -18,6 +18,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import deployABI from '../ABIs/Deploy.json'
 import claimABI from '../ABIs/Claim.json'
 import poolABI from '../ABIs/Pool.json'
+import { ethers } from "ethers";
 
 
 import GoerliAddressData from './GoerliChainlinkOracles.js'
