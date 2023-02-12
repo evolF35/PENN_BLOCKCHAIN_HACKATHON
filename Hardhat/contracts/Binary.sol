@@ -69,13 +69,13 @@ contract Pool {
     function pastSettlementDate() public view returns (bool){
         return(block.timestamp > settlementDate);
     }
-    function getDiscountedValue() public view returns (uint256){
+    function getDiscount() public view returns (uint256){
         uint256 temp = (block.timestamp - startDate);
         uint256 discount = temp * decayFactor;
         uint256 amt = (1e18 - discount);
         return(amt);
     }
-
+    
     AggregatorV3Interface public oracle;
 
     constructor(
@@ -255,8 +255,6 @@ contract Pool {
 }
 
 contract deploy {
-
-
     event PoolCreated(
         address _oracle, 
         int256 _price, 
