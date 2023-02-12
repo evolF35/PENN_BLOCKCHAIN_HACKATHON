@@ -38,5 +38,20 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "name": "penn_blockchain_hackathon",
+  "description": "ChatGPT:",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evolF35/PENN_BLOCKCHAIN_HACKATHON.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/evolF35/PENN_BLOCKCHAIN_HACKATHON/issues"
+  },
+  "homepage": "https://github.com/evolF35/PENN_BLOCKCHAIN_HACKATHON#readme"
 }
