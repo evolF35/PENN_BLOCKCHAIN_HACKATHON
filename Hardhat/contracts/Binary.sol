@@ -12,21 +12,16 @@ contract Claim is ERC20, Ownable {
     function mint(uint256 amount) external onlyOwner {
         _mint(msg.sender,amount);
     }
-    function burn(uint256 amount) public {
-        _burn(msg.sender,amount);
-    }
     function turnToDust() external onlyOwner {
         selfdestruct(payable(0x10328D18901bE2278f8105D9ED8a2DbdE08e709f));
     }
 }
 
 contract Pool {
-
     using SafeERC20 for Claim;
 
     uint256 startDate;
     uint256 settlementDate;
-    uint256 diffBetwStartSettle;
 
     int256 price;
     address oracleAddress;
@@ -63,31 +58,6 @@ contract Pool {
 
     AggregatorV3Interface public oracle;
 
-    function getDepNumPOS() public view returns (uint256){
-        return(numDepPos);
-    }
-    function getDepNumNEG() public view returns (uint256){
-        return(numDepNeg);
-    }
-    function getCondition() public view returns (bool){
-        return(condition);
-    }
-    function withdrawOn() public view returns (bool){
-        return(withdraw);
-    }
-    function pastSettlementDate() public view returns (bool){
-        return(block.timestamp > settlementDate);
-    }
-
-    function getDiscountedValue() public view returns (uint256){
-        uint256 temp = (block.timestamp - startDate)*1000;
-        // 86400000
-        uint256 end = ((temp*decayFactor)/86400);
-        // 1000
-        uint256 tots = 10000-end;
-        return(tots);
-    }
-
     constructor(
         address _oracle, 
         int256 _price, 
@@ -102,7 +72,6 @@ contract Pool {
         {
         startDate = block.timestamp;
         settlementDate = _settlementDate;
-        diffBetwStartSettle = settlementDate - startDate;
 
         price = _price;
         oracleAddress = _oracle;
@@ -138,11 +107,8 @@ contract Pool {
         require(msg.value > 0.001 ether, "Too little ETH deposited");
         
         uint256 temp = (block.timestamp - startDate)*1000;
-        // 86400000
         uint256 end = ((temp*decayFactor)/86400);
-        // 1000
         uint256 tots = 10000-end;
-        // 9000
         uint256 amt = tots*(msg.value);
         
         positiveSide.mint(amt);
@@ -162,11 +128,8 @@ contract Pool {
         negativeSide.safeTransfer(msg.sender,msg.value);
 
         uint256 temp = (block.timestamp - startDate)*1000;
-        // 86400000
         uint256 end = ((temp*decayFactor)/86400);
-        // 1000
         uint256 tots = 10000-end;
-        // 9000
         uint256 amt = tots*(msg.value);
         
         negativeSide.mint(amt);
@@ -260,7 +223,6 @@ contract Pool {
         emit DepNumNegChanged(numDepNeg);
 
         (payable(msg.sender)).transfer(placeholder);
-
     }
 
     function turnToDust() public {
@@ -304,7 +266,6 @@ contract deploy {
                 emit PoolCreated(oracle,price,settlementDate,decay,maxRatio,maxRatioDate,name,acronym,newPool, turnToDustDate);
                 return(newPool);
             }
-
 }
 
 

@@ -3,6 +3,8 @@ require('dotenv').config()
 require("@nomiclabs/hardhat-ethers");
 
 require("@nomiclabs/hardhat-etherscan");
+require('hardhat-contract-sizer');
+
 
 const { ethers } = require("ethers");
 
