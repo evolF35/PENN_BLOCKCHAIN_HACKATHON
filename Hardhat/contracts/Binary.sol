@@ -217,8 +217,8 @@ contract Pool {
     function turnWithdrawOn() public {
         require(block.timestamp < maxRatioDate, "The Withdrawal Date has passed");
         require(PosAmtDeposited[msg.sender] > 0 ||  NegAmtDeposited[msg.sender] > 0, "You have not deposited any funds");
-        require(maxRatio < (numDepPos/numDepNeg), "The minimum ratio has not been met");
-        if(maxRatio < (numDepPos/numDepNeg)){
+        require((numDepPos/numDepNeg) > maxRatio, "The minimum ratio has not been met");
+        if((numDepPos/numDepNeg) > maxRatio){
             withdraw = true;
             emit WithdrawChanged(withdraw);
         }
