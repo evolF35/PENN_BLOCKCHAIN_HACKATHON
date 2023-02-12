@@ -190,16 +190,6 @@ contract Pool {
         emit pastSettlementDateChanged(true);
     }
 
-    function turnWithdrawOn() public {
-        require(block.timestamp < minRatioDate, "The Withdrawal Date has passed");
-        require(PosAmtDeposited[msg.sender] > 0 ||  NegAmtDeposited[msg.sender] > 0, "You have not deposited any funds");
-        require(minRatio < (numDepPos/numDepNeg), "The minimum ratio has not been met");
-        if(minRatio < (numDepPos/numDepNeg)){
-            withdraw = true;
-            emit WithdrawChanged(withdraw);
-        }
-    }
-
     function redeemWithPOS() public { 
         require(block.timestamp > settlementDate, "Current time is before settlement date");
         require(condition == true,"The POS side did not win");
@@ -222,6 +212,16 @@ contract Pool {
         negativeSide.safeTransferFrom(msg.sender,address(this),negativeSide.balanceOf(msg.sender));
 
         (payable(msg.sender)).transfer(saved);
+    }
+
+    function turnWithdrawOn() public {
+        require(block.timestamp < minRatioDate, "The Withdrawal Date has passed");
+        require(PosAmtDeposited[msg.sender] > 0 ||  NegAmtDeposited[msg.sender] > 0, "You have not deposited any funds");
+        require(minRatio < (numDepPos/numDepNeg), "The minimum ratio has not been met");
+        if(minRatio < (numDepPos/numDepNeg)){
+            withdraw = true;
+            emit WithdrawChanged(withdraw);
+        }
     }
 
     function withdrawWithPOS() public {
