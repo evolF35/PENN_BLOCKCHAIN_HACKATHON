@@ -1,3 +1,25 @@
+ChatGPT: 
+
+This is a smart contract that implements a binary options pool, where users can deposit to either the positive side or the negative side of an event based on their prediction of the outcome. The contract uses a Chainlink oracle to retrieve the price of the underlying asset, which is then used to determine the winning side. The tokens deposited are discounted based on the decay factor, which is a value that decreases over time. The contract has several functions to deposit, settle, redeem, and withdraw funds, as well as to turn on withdrawals and destroy the contract.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Create React App
 
 This directory is a brief example of a [Create React App](https://github.com/facebook/create-react-app) site that can be deployed to Vercel with zero configuration.
