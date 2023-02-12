@@ -10,7 +10,7 @@ import CollapsibleTable from '../MISC/Table'
 
 
 const PoolJS = () => {
-	let contractAddress = '0xFf408125bf10064a4518f9aDa10b0E2124FAA807';
+	let contractAddress = '0x830E91da2d1a09756e4B8230D07915Ff9e6dCafe';
 
 	const [errorMessage, setErrorMessage] = useState(null);
 	const [defaultAccount, setDefaultAccount] = useState(null);

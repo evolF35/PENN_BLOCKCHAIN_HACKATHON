@@ -5,13 +5,11 @@ import deployABI from '../ABIs/Deploy.json'
 
 const DeployJS = () => {
 
-  let contractAddress = '0xFf408125bf10064a4518f9aDa10b0E2124FAA807';
+  let contractAddress = '0x830E91da2d1a09756e4B8230D07915Ff9e6dCafe';
 
 	const [errorMessage, setErrorMessage] = useState(null);
 	const [defaultAccount, setDefaultAccount] = useState(null);
 	const [connButtonText, setConnButtonText] = useState('Connect Wallet');
-
-	const [currentContractVal, setCurrentContractVal] = useState(null);
 
 	const [provider, setProvider] = useState(null);
 	const [signer, setSigner] = useState(null);
@@ -94,7 +92,7 @@ const DeployJS = () => {
       </label>
       <br />
       <label>
-        Settlement Price
+        Settlement Price in ChainLink Round Format
         <input id="setText2"
           type="text"
           placeholder='200000000000'
@@ -110,12 +108,11 @@ const DeployJS = () => {
       </label>
       <br />
       <label>
-        Decay Rate
+        Decay Rate in ChainLink Round Format
         <input id="setText4"
           type="text"
-          placeholder='2'
+          placeholder='1000000000000'
         />
-        Percent decrease of inputs per day. 2 = 2% decrease per day
       </label>
       <br />
       <label>
@@ -152,7 +149,7 @@ const DeployJS = () => {
       </label>
         <br />
       <label>
-        DestructionDate 
+        DestructionDate in Unix Time
         <input id="setText9"
           type="text"
           placeholder='1909090909'
