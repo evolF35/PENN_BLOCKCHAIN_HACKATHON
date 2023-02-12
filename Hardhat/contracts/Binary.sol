@@ -54,6 +54,22 @@ contract Pool {
     event pastSettlementDateChanged(bool pastSettlementDate);
     event contractGone(bool gone);
 
+    function getDepNumPOS() public view returns (uint256){
+        return(numDepPos);
+    }
+    function getDepNumNEG() public view returns (uint256){
+        return(numDepNeg);
+    }
+    function getCondition() public view returns (bool){
+        return(condition);
+    }
+    function withdrawOn() public view returns (bool){
+        return(withdraw);
+    }
+    function pastSettlementDate() public view returns (bool){
+        return(block.timestamp > settlementDate);
+    }
+    
     AggregatorV3Interface public oracle;
 
     constructor(
@@ -233,6 +249,8 @@ contract Pool {
 }
 
 contract deploy {
+
+
     event PoolCreated(
         address _oracle, 
         int256 _price, 
@@ -244,6 +262,8 @@ contract deploy {
         string acronym,
         address poolAddress, 
         uint256 turnToDustDate);
+
+    mapping(address => address) public pools;
 
     function createPool(
         address oracle, 
