@@ -229,17 +229,18 @@ contract Pool {
         require(block.timestamp < maxRatioDate, "The Withdrawal Date has passed");
         require(positiveSide.balanceOf(msg.sender) > 0, "You have no tokens");
 
-        //If they withdraw and it increases (numDepPos/numDepNeg) above maxRatio, then they can't withdraw again
-
         if((numDepPos - PosAmtDeposited[msg.sender])/(numDepNeg) > maxRatio){
             require(true == false, "You can't withdraw because it would increase the ratio above the max ratio");
         }
 
         positiveSide.safeTransferFrom(msg.sender,address(this),positiveSide.balanceOf(msg.sender));
-        (payable(msg.sender)).transfer(PosAmtDeposited[msg.sender]);
-        
-        numDepPos = numDepPos - PosAmtDeposited[msg.sender];
+
+        uint256 placeholder = PosAmtDeposited[msg.sender];
         PosAmtDeposited[msg.sender] = 0;
+        numDepPos = numDepPos - placeholder;
+        emit DepNumPosChanged(numDepPos);
+
+        (payable(msg.sender)).transfer(placeholder);
     }
 
     function withdrawWithNEG() public {
@@ -252,10 +253,14 @@ contract Pool {
         }
 
         negativeSide.safeTransferFrom(msg.sender,address(this),negativeSide.balanceOf(msg.sender));
-        (payable(msg.sender)).transfer(NegAmtDeposited[msg.sender]);
 
-        numDepNeg = numDepNeg - NegAmtDeposited[msg.sender];
+        uint256 placeholder = NegAmtDeposited[msg.sender];
         NegAmtDeposited[msg.sender] = 0;
+        numDepNeg = numDepNeg - placeholder;
+        emit DepNumNegChanged(numDepNeg);
+
+        (payable(msg.sender)).transfer(placeholder);
+
     }
 
     function turnToDust() public {
